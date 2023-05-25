@@ -1,8 +1,9 @@
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup as bs
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-import time
+import requests
+import os
+import urllib.request
 
 print("원하는 인물을 입력하세요.\n")
 
@@ -34,6 +35,18 @@ def get_image_url(html):
 
     return images_url
 
+def download_image(data, path: str):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    for idx, url in enumerate(data): 
+        response = requests.get(url)
+        file_path = os.path.join(path, f'image{idx}.jpg')
+        urllib.request.urlretrieve(url, file_path)
+
 html = crawl(person)
 
 data = get_image_url(html)
+
+#원하는 경로 복붙
+download_image(data, "")
